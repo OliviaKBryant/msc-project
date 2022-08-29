@@ -24,17 +24,20 @@ library(stringr)
 library(ggplot2)
 library(patchwork)
 
-# function to generate data for table 3 one outcome at a time -----------------------------------
-its_counts_poisson_function <- function(outcome,
+its_counts_poisson_function <- function(outcomes,
                                         cut_data = as.Date("2018-01-01"),
                                         start_lockdown =   as.Date("2020-03-08"),
                                         lockdown_adjustment_period_wks = 3,
                                         end_post_lockdown_period = as.Date("2020-08-01"),
                                         display_from = as.Date("2020-01-01"),
-                                        table_path) {
+                                        chop_selfharm = TRUE,
+                                        table_path,
+                                        incl_no_ldn_ribbon = TRUE) {
   
     
       plot_outcome <- function(outcome){
+        
+        if(outcome == "selfharm" & chop_selfharm){cutData <- as.Date("2019-01-01")}
         df_outcome <- format_outcome_data(outcome, start_lockdown, 
                                           lockdown_adjustment_period_wks, 
                                           end_post_lockdown_period,
@@ -129,7 +132,7 @@ its_counts_poisson_function <- function(outcome,
       
       main_plot_data$outcome_name <- factor(main_plot_data$outcome_name, levels = outcome_of_interest_namematch$outcome_name[plot_order])
       
-      poisson_count_plot(main_plot_data, start_lockdown, display_from)
+      poisson_count_plot(main_plot_data, start_lockdown, display_from, incl_no_ldn_ribbon)
 }
 
 

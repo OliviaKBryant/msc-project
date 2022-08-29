@@ -33,9 +33,13 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 												 chop_selfharm = TRUE,
 												 display_from = as.Date("2020-01-01"),
 												 table_path,
-												 remove_xmas = FALSE){
+												 remove_xmas = FALSE,
+												 incl_no_ldn_ribbon = TRUE){
 			
-		plot_outcome <- function(outcome){
+		plot_outcome <- function(outcome) {
+		  
+		  if(outcome == "selfharm" & chop_selfharm){cutData <- as.Date("2019-01-01")}
+		  
 			df_outcome <- format_outcome_data(outcome, start_lockdown, 
 			                                lockdown_adjustment_period_wks, 
 			                                end_post_lockdown_period,
@@ -144,7 +148,7 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 			parameter_estimates <- as.data.frame(ci.exp(binom_model2))
 			vals_to_print <- parameter_estimates %>%
 				mutate(var = rownames(parameter_estimates)) %>%
-				filter(var == "lockdown") %>%
+			  filter(var == "lockdown") %>%
 				mutate(var = outcome)
 			
 			## Get ORs for effect of time on outcome after lockdown (time + interaction of time:lockdown)
@@ -164,18 +168,18 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 		main_plot_data <- NULL
 		forest_plot_data <- NULL
 		interaction_tbl_data <- NULL
-		for(ii in 1:length(outcomes)){
+		for(ii in 1:length(outcomes_vec)){
 			main_plot_data <- main_plot_data %>%
 				bind_rows(
-					plot_outcome(outcomes[ii])$df_1
+					plot_outcome(outcomes_vec[ii])$df_1
 				)
 			forest_plot_data <- forest_plot_data %>%
 				bind_rows(
-					plot_outcome(outcomes[ii])$vals_to_print
+					plot_outcome(outcomes_vec[ii])$vals_to_print
 				)
 			interaction_tbl_data <- interaction_tbl_data %>%
 				bind_rows(
-					plot_outcome(outcomes[ii])$interaction_to_print
+					plot_outcome(outcomes_vec[ii])$interaction_to_print
 				)
 		}
 		
@@ -189,7 +193,7 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 		## replace outcome name with the pretty name for printing on results
 		main_plot_data$outcome_name <- factor(main_plot_data$outcome_name, levels = outcome_of_interest_namematch$outcome_name[plot_order])
 		
-		plot1 <- binomial_proportion_plot(main_plot_data, start_lockdown, display_from)
+		plot1 <- binomial_proportion_plot(main_plot_data, start_lockdown, display_from, incl_no_ldn_ribbon)
 		
 		# Forest plot of interaction terms -----------------------------------------
 		interaction_tbl_data <- interaction_tbl_data %>%
@@ -240,7 +244,7 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 # Negative Binomial to model number of contacts
 #-------------------------------------------------------------------------------
 
-neg_binomial_counts_function <- function(outcome,
+neg_binomial_counts_function <- function(outcomes,
                                         cut_data = as.Date("2018-01-01"),
                                         start_lockdown =   as.Date("2020-03-08"),
                                         lockdown_adjustment_period_wks = 3,

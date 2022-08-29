@@ -123,3 +123,32 @@ format_counts_table <- function(outcome, df_outcome, df_se, start_lockdown, lock
   
   return(tab_fmt)
 }
+
+split_regional_data <- function(outcome, group_region_codes) {
+ 
+  df_outcome <- get(outcome)
+  
+  df_outcome <- df_outcome %>%
+    filter(stratifier == "region") %>%
+    filter(category %in% group_region_codes) %>%
+    filter(year(weekDate) != 2021) %>%
+    dplyr::select(-stratifier, -category) %>%
+    group_by(weekDate, week, lockdown) %>%
+    summarise(numOutcome = sum(numOutcome),
+              numEligible = sum(numEligible), .groups='keep')
+  
+  df_outcome$stratifier <- rep('overall', nrow(df_outcome))
+  df_outcome$category<- rep(1, nrow(df_outcome))
+  
+  return(df_outcome)
+}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

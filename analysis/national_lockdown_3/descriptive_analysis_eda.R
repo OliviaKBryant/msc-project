@@ -15,7 +15,7 @@ library(scales)
 library(patchwork)
 source("code/plot_code/descriptive_plot_code.R")
 
-lockdownFiles <- list.files(here::here("analysis_data/national_lockdown/"), 
+lockdownFiles <- list.files(here::here("analysis_data/national_lockdown_3/"), 
                             pattern = "an_")
 outcomes <- stringr::str_remove_all(lockdownFiles, c("an_|.csv"))
 
@@ -29,7 +29,7 @@ outcome_of_interest_namematch <- bind_cols("outcome" = outcomes,
 )
 
 for(ii in 1:length(outcomes)){
-  load_file <- read.csv(here::here("analysis_data/national_lockdown/", paste0("an_", outcomes[ii], ".csv")))
+  load_file <- read.csv(here::here("analysis_data/national_lockdown_3/", paste0("an_", outcomes[ii], ".csv")))
   assign(outcomes[ii], load_file)
 }
 

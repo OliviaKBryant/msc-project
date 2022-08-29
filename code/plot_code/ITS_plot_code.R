@@ -7,7 +7,8 @@
 # Ref:
 #-------------------------------------------------------------------------------
 
-binomial_proportion_plot <- function(data, start_lockdown, display_from){
+binomial_proportion_plot <- function(data, start_lockdown, display_from,
+                                     incl_no_ldn_ribbon = TRUE){
   
   abline_max <- data$weekPlot[max(which(is.na(data$lockdown))) + 1]
   abline_min <- data$weekPlot[min(which(is.na(data$lockdown))) - 1]
@@ -22,7 +23,6 @@ binomial_proportion_plot <- function(data, start_lockdown, display_from){
     geom_line(col = "gray60") +
     ### the probability if there was no lockdown
     geom_line(data = filter(data, weekPlot >= abline_min), aes(y = probline_noLdn), col = 2, lty = 2) +
-    geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = lci_noLdn, ymax=uci_noLdn), fill = alpha(2, 0.4), lty = 0) +
     ### probability with model (inc. std. error)
     geom_line(aes(y = predicted_vals), col = 4, lty = 2) +
     geom_ribbon(aes(ymin = lci, ymax=uci), fill = alpha(4, 0.4), lty = 0) +
@@ -48,10 +48,15 @@ binomial_proportion_plot <- function(data, start_lockdown, display_from){
           panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
           panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3)))  + 
       scale_x_date(breaks = "1 month", date_labels = "%b")
+  
+    if(incl_no_ldn_ribbon){
+      plot <- plot + geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = lci_noLdn, ymax=uci_noLdn), fill = alpha(2, 0.4), lty = 0) 
+    }
     return(plot)
 }
 
-poisson_count_plot <- function(data, start_lockdown, display_from){
+poisson_count_plot <- function(data, start_lockdown, display_from,
+                               incl_no_ldn_ribbon = TRUE){
   
   abline_max <- data$weekPlot[max(which(is.na(data$lockdown))) + 1]
   abline_min <- data$weekPlot[min(which(is.na(data$lockdown))) - 1]
@@ -66,7 +71,6 @@ poisson_count_plot <- function(data, start_lockdown, display_from){
     geom_line(col = "gray60") +
     ### the probability if there was no lockdown
     geom_line(data = filter(data, weekPlot >= abline_min), aes(y = pred_noLdn), col = 2, lty = 2) +
-    geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = low_noLdn, ymax = upp_noLdn), fill = alpha(2,0.4), lty = 0) +
     ### probability with model (inc. std. error)
     geom_line(aes(y = pred), col = 4, lty = 2) +
     geom_ribbon(aes(ymin = low, ymax = upp), fill = alpha(4,0.4), lty = 0) +
@@ -92,6 +96,10 @@ poisson_count_plot <- function(data, start_lockdown, display_from){
           panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
           panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3)))  + 
     scale_x_date(breaks = "1 month", date_labels = "%b")
+  
+  if (incl_no_ldn_ribbon){
+    plot <- plot +  geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = low_noLdn, ymax = upp_noLdn), fill = alpha(2,0.4), lty = 0)
+  }
   return(plot)
 }
 
