@@ -80,6 +80,7 @@ binomial_its_function_group(outcomes_vec = outcomes,
                       chop_selfharm = F, 
                       display_from = as.Date("2020-04-01"),
                       table_path = "plots/regional_restrictions/high",
+                      group = "high_tier",
                       remove_xmas = TRUE,
                       incl_no_ldn_ribbon = FALSE
 )
@@ -87,13 +88,13 @@ dev.off()
 
 pdf(file = here::here("plots/regional_restrictions/high", paste0("Tiers_3wks_8thMarch", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes[ii],
+its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2020-03-22"),
                             start_lockdown = as.Date("2020-10-14"),
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-03-31"),
                             display_from = as.Date("2020-04-01"),
-                            table_path = "plots/regional_restrictions/high/poisson_counts_3wks_HighTier.csv")
+                            table_path = "plots/regional_restrictions/high/poisson_counts_3wks_high_tier.csv")
 dev.off()
 
 #-------------------------------------------------------------------------------
@@ -118,6 +119,7 @@ binomial_its_function_group(outcomes_vec = outcomes,
                       display_from = as.Date("2020-04-01"),
                       table_path = "plots/regional_restrictions/low",
                       remove_xmas = TRUE,
+                      group = "low_tier",
                       incl_no_ldn_ribbon = FALSE
                       
 )
@@ -131,7 +133,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-04-30"),
                             display_from = as.Date("2020-04-01"),
-                            table_path = "plots/regional_restrictions/low/poisson_counts_3wks_LowTier.csv",
+                            table_path = "plots/regional_restrictions/low/poisson_counts_3wks_low_tier.csv",
                             remove_xmas = TRUE,
                             incl_no_ldn_ribbon = FALSE
 )

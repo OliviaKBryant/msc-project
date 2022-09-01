@@ -235,7 +235,7 @@ dev.off()
 # Poisson Counts ITS 7 week adjustment: 8th March ------------------------------
 pdf(file = here::here("plots/national_lockdown_3/poisson", paste0("ThirdLockdown_7wks_8thMarch", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes[ii],
+its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2020-03-08"),
                             start_lockdown =   as.Date("2021-01-05"),
                             lockdown_adjustment_period_wks = 7,
