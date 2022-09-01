@@ -332,11 +332,13 @@ binomial_its_function_regional <- function(outcomes_vec = outcomes,
     
     ## Get ORs for effect of lockdown
     parameter_estimates <- as.data.frame(ci.exp(binom_model2))
+    p_val_estimates <- as.data.frame(coef(summary(binom_model2))[,4])
     vals_to_print <- parameter_estimates %>%
       mutate(var = rownames(parameter_estimates)) %>%
       mutate(var = outcome)
     
-    vals_to_print <- cbind(term = rownames(vals_to_print), vals_to_print)
+    vals_to_print <- merge(vals_to_print, p_val_estimates, by=0, all=TRUE, row.names=FALSE)
+    colnames(vals_to_print) <- c("term", "exp(Est.)", "2.5%", "97.5%", "outcome", "p-value")
     
     vals_to_print <- vals_to_print %>%
       filter(term %in% c("lockdown", "grouplow tier", "lockdown:grouplow tier"))
@@ -355,14 +357,14 @@ binomial_its_function_regional <- function(outcomes_vec = outcomes,
 
   estimates_data <- estimates_data %>%
     rename("Est" = "exp(Est.)", "lci" = "2.5%", "uci" = "97.5%") %>%
-    left_join(outcome_of_interest_namematch, by = c("var" = "outcome"))
+    left_join(outcome_of_interest_namematch, by = c("outcome" = "outcome"))
   
   # changes the names of outcomes to full names
   estimates_data $outcome_name <- factor( estimates_data $outcome_name, levels = outcome_of_interest_namematch$outcome_name[plot_order])
-  estimates_data  <-  estimates_data %>% select(-var)
+  # estimates_data  <-estimates_data %>% select(-var)
   pastename_year_cut_data <- lubridate::year(cut_data)
   
   # export table of results for the appendix 
-  write.csv( estimates_data, file = here::here(table_path, paste0("its_main_ORs_Regional_",lockdown_adjustment_period_wks, ".csv")))
+  write.csv(estimates_data, file = here::here(table_path, paste0("its_main_ORs_Regional_",lockdown_adjustment_period_wks, ".csv")))
   
 }

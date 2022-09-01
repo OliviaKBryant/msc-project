@@ -58,13 +58,6 @@ selfharm_low <- split_regional_data('selfharm', low_group)
 smi_high <- split_regional_data('smi', high_group)
 smi_low <- split_regional_data('smi', low_group)
 
-outcomes_high_group <- c('anxiety_high', 'depression_high', 
-                         'feedingdisorder_high', 'ocd_high',
-                         'selfharm_high', 'smi_high')
-
-outcomes_low_group <- c('anxiety_low', 'depression_low', 
-                         'feedingdisorder_low', 'ocd_low',
-                         'selfharm_low', 'smi_low')
 #-------------------------------------------------------------------------------
 # High Restriction Group
 #-------------------------------------------------------------------------------
@@ -121,8 +114,7 @@ binomial_its_function_group(outcomes_vec = outcomes,
                       cut_data = as.Date("2020-03-22"),
                       start_lockdown = as.Date("2020-10-14"),
                       lockdown_adjustment_period_wks = 3,
-                      end_post_lockdown_period = as.Date("2021-03-31"),
-                      chop_selfharm = F, 
+                      end_post_lockdown_period = as.Date("2021-04-30"),
                       display_from = as.Date("2020-04-01"),
                       table_path = "plots/regional_restrictions/low",
                       remove_xmas = TRUE,
@@ -133,13 +125,16 @@ dev.off()
 
 pdf(file = here::here("plots/regional_restrictions/low", paste0("Tiers_3wks_8thMarch", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes[ii],
+its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2020-03-22"),
                             start_lockdown = as.Date("2020-10-14"),
                             lockdown_adjustment_period_wks = 3,
-                            end_post_lockdown_period = as.Date("2021-03-31"),
+                            end_post_lockdown_period = as.Date("2021-04-30"),
                             display_from = as.Date("2020-04-01"),
-                            table_path = "plots/regional_restrictions/low/poisson_counts_3wks_LowTier.csv")
+                            table_path = "plots/regional_restrictions/low/poisson_counts_3wks_LowTier.csv",
+                            remove_xmas = TRUE,
+                            incl_no_ldn_ribbon = FALSE
+)
 dev.off()
 
 #-------------------------------------------------------------------------------
@@ -170,7 +165,7 @@ binomial_its_function_regional(outcomes_vec = outcomes,
                             start_lockdown = as.Date("2020-10-14"),
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-03-31"),
-                            chop_selfharm = F, 
+                            chop_selfharm = FALSE, 
                             display_from = as.Date("2020-04-01"),
                             table_path = "plots/regional_restrictions/",
                             remove_xmas = TRUE

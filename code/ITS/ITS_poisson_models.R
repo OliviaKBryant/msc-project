@@ -32,6 +32,7 @@ its_counts_poisson_function <- function(outcomes,
                                         display_from = as.Date("2020-01-01"),
                                         chop_selfharm = TRUE,
                                         table_path,
+                                        remove_xmas = FALSE,
                                         incl_no_ldn_ribbon = TRUE) {
   
     
@@ -43,6 +44,11 @@ its_counts_poisson_function <- function(outcomes,
                                           end_post_lockdown_period,
                                           cut_data)
           
+        if(remove_xmas){
+          df_outcome <- df_outcome %>%
+            filter(xmas == 0)
+        }
+        
         # start of post-lockdown period
         ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]
         
