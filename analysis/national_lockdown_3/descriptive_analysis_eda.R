@@ -154,6 +154,8 @@ for(ii in outcomes){
     )
 }
 
+plot_2021 <- plot_2021[complete.cases(plot_2021), ]
+
 bkg_colour <- "white"
 colors <- c("2020" = "cadetblue4", "2017-2019 average" = "black", "2021" = "coral4")
 
@@ -164,7 +166,6 @@ figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)
   geom_line(aes(y = value_hist, col = "2017-2019 average"), lwd = 1.2) +
   geom_line(aes(y = value_20, col = "2020"), lty = 5, lwd = 0.8) +
   geom_ribbon(aes(ymin = value_20, ymax = value_hist), fill = "cadetblue", lty = 0, alpha = 0.3) +
-  scale_x_date(date_labels = "%b", breaks = "2 months") +
   facet_wrap(~outcome, scales = "free", ncol = 2) +
   geom_vline(xintercept = as.Date("1991-03-23"), linetype = "dashed", col = "darkgrey") +
   geom_vline(xintercept = as.Date("1991-11-05"), linetype = "dashed", col = "darkgrey") +
@@ -199,8 +200,8 @@ figure_2021_hist <- ggplot(plot_2021, aes(x = plotWeek, y = value, group = year)
   geom_line(aes(y = value_20, col = "2021"), lty = 5, lwd = 0.8) +
   geom_ribbon(aes(ymin = value_20, ymax = value_hist), fill = "coral", lty = 0, alpha = 0.3) +
   scale_x_date(date_labels = "%b", breaks = "2 months") +
-  xlim(as.Date("1991-01-01"), as.Date("1991-04-30"))+
   facet_wrap(~outcome, scales = "free", ncol = 2) +
+  xlim(c(as.Date("1990-12-31"), as.Date("1991-05-01")))+
   geom_vline(xintercept = as.Date("1991-01-06"), linetype = "dashed", col = "darkgrey") +
   labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
   theme_classic() +
