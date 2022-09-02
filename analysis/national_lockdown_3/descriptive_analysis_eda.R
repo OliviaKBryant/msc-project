@@ -50,42 +50,179 @@ weeklyDenoms <- weeklyDenoms %>%
 # Overall outcomes plot
 #-------------------------------------------------------------------------------
 
-p1 <- overallOutcomePlot(anxiety, "Anxiety", 0.01, "2020-01-01")
-p2 <- overallOutcomePlot(depression, "Depression", 0.01, "2020-01-01")
-p3 <- overallOutcomePlot(ocd, "OCD", 0.001, "2020-01-01")
-p4 <- overallOutcomePlot(feedingdisorder, "Feeding Disorder", 0.002, "2020-01-01")
-p5 <- overallOutcomePlot(selfharm, "Self Harm", 0.001, "2020-01-01")
-p6 <- overallOutcomePlot(smi, "Severe Mental Illness", 0.01, "2020-01-01")
+p1 <- overall_outcome_plot(anxiety, "Anxiety", 0.01, "2020-01-01")
+p2 <- overall_outcome_plot(depression, "Depression", 0.01, "2020-01-01")
+p3 <- overall_outcome_plot(ocd, "OCD", 0.001, "2020-01-01")
+p4 <- overall_outcome_plot(feedingdisorder, "Feeding Disorder", 0.002, "2020-01-01")
+p5 <- overall_outcome_plot(selfharm, "Self Harm", 0.001, "2020-01-01")
+p6 <- overall_outcome_plot(smi, "Severe Mental Illness", 0.01, "2020-01-01")
 
-overallOutcome <- (p1 + p2) / (p3 + p4) / (p5 + p6) 
-ggsave(plot = overallOutcome,'plots/descriptive/overall_outcomes.pdf', width = 11.69, height = 8.27, units = "in")
+overall_outcome <- (p1 + p2) / (p3 + p4) / (p5 + p6) 
+ggsave(plot = overall_outcome,'plots/descriptive/overall_outcomes.pdf', width = 11.69, height = 8.27, units = "in")
 
 
 #-------------------------------------------------------------------------------
 # Outcome plots by stratifier - 2020 and 2021
 #-------------------------------------------------------------------------------
+anxiety$outcome <- 'Anxiety'
+depression$outcome <- 'Depression'
+feedingdisorder$outcome <- 'Eating Disorder'
+ocd$outcome <- 'OCD'
+selfharm$outcome <- 'Self-Harm'
+smi$outcome <- 'Severe Mental Illness'
 
-anxiety_gender <- anxiety %>%
+all_outcomes <- rbind(anxiety, depression, feedingdisorder, ocd, selfharm, smi)%>%
+  mutate(category_cat = category) %>%
+  mutate(proportion = (numOutcome / numEligible) * 100) %>%
+  mutate_at("category_cat" , ~ifelse(stratifier == "gender", 
+                                     recode(.,`1` = "Female", `2` = "Male"),
+                                     ifelse(stratifier == "age", 
+                                            recode(.,`10` = "10-30", `20` = "10-30", `30` = "30-50", `40` = "30-50", `50` = "50-70", `60` = "50-70", `70` = "70+", `80` = "70+", `90` = "70+", `100` = "70+"),
+                                            ifelse(stratifier == "region", 
+                                                   recode(.,`1` = "North East",`2` = "North West",`3` = "Yorkshire & the Humber",`4` = "East Midlands",`5` = "West Midlands",`6` = "Eastern",`7` = "South West",`8` = "South Central",`9` = "London",`10` = "South East",`11` = "Northern Ireland"),
+                                                   .)
+                                     )
+  )
+  )
+
+all_outcomes_gender <- all_outcomes %>%
   filter(stratifier == 'gender') %>%
-  filter(weekDate >= "2020-01-01") %>%
-  mutate(proportion = (numOutcome/numEligible)*100) %>%
-  mutate(gender = as.factor(category))
+  filter(weekDate >= "2020-01-01")
 
-ggplot(anxiety_gender, aes(x =as.Date(weekDate), y = proportion, color = gender)) +
-  geom_line(aes(group=gender)) +
-  geom_point(size = 0.1) +
-  xlab("Date") +
-  ylab("Proportion Overall") +
-  ggtitle("Anxiety") +
-  theme_fivethirtyeight() +
-  theme(plot.background = element_rect(fill = "white", colour = "white"),
-        panel.background = element_rect(fill = "white", colour = "white"),
-        legend.background = element_rect(fill = "white", colour = "white"),
-        panel.grid.major.x = element_blank() ,
-        panel.grid.major.y = element_line(size=.1, color="grey"),
-        axis.text.x = element_text(angle = 70, hjust = 1),
-        axis.text.y = element_text()) +
-  scale_x_date(date_labels = "%b %Y", breaks = breaks_pretty(10),labels = scales::label_date_short())+
-  expand_limits(y=0)
+all_outcomes_ethnicity <- all_outcomes %>%
+  filter(stratifier == 'ethnicity') %>%
+  filter(weekDate >= "2020-01-01") 
 
+stratified_plot(all_outcomes_gender)
+stratified_plot(all_outcomes_ethnicity)
+
+#-------------------------------------------------------------------------------
+# Pre-pandemic data compared to 2020 and 2021
+#-------------------------------------------------------------------------------
+
+plot_2020 <- NULL
+for(ii in outcomes){
+  print(ii)
+  plot_2020 <- plot_2020 %>%
+    bind_rows(
+      format_historical_plot_data(ii, 2020, 2021)
+    )
+}
+
+bkg_colour <- "white"
+colors <- c("2020" = "cadetblue4", "2017-2019 average" = "black")
+figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)) +
+  geom_line(data = filter(plot_2020, year == 2017), alpha = 0.2) +  
+  geom_line(data = filter(plot_2020, year == 2018), alpha = 0.2) +   
+  geom_line(data = filter(plot_2020, year == 2019), alpha = 0.2) +
+  geom_line(aes(y = value_hist, col = "2017-2019 average"), lwd = 1.2) +
+  geom_line(aes(y = value_20, col = "2020"), lty = 5, lwd = 0.8) +
+  geom_ribbon(aes(ymin = value_20, ymax = value_hist), fill = "cadetblue", lty = 0) +
+  scale_x_date(date_labels = "%b", breaks = "2 months") +
+  facet_wrap(~outcome, scales = "free", ncol = 2) +
+  geom_vline(xintercept = as.Date("1991-03-23"), linetype = "dashed", col = 2) +
+  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 16),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(angle = 60, hjust = 1, size = 12),
+        legend.position = "top",
+        plot.background = element_blank(),
+        panel.background = element_blank(),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.background = element_rect(fill = bkg_colour, colour = NA),
+        strip.background = element_rect(fill = bkg_colour, colour =  NA),
+        strip.text = element_text(size = 12, hjust = 0),
+        panel.grid.major = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
+        panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3))) +
+  scale_color_manual(name = "",
+                     breaks = c("2017-2019 average", "2020"),
+                     labels = c("2017-2019 average", "2020"),
+                     values = colors)
+figure_2020_hist
+ggsave(plot = figure_2020_hist,'plots/descriptive/overall_2020_historical_comparison.pdf', width = 11.69, height = 8.27, units = "in")
+
+plot_2021 <- NULL
+for(ii in outcomes){
+  print(ii)
+  plot_2021 <- plot_2021 %>%
+    bind_rows(
+      format_historical_plot_data(ii, 2021, 2020)
+    )
+}
+
+bkg_colour <- "white"
+colors <- c("2020" = "cadetblue4", "2017-2019 average" = "black", "2021" = "coral4")
+
+figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)) +
+  geom_line(data = filter(plot_2020, year == 2017), alpha = 0.2) +  
+  geom_line(data = filter(plot_2020, year == 2018), alpha = 0.2) +   
+  geom_line(data = filter(plot_2020, year == 2019), alpha = 0.2) +
+  geom_line(aes(y = value_hist, col = "2017-2019 average"), lwd = 1.2) +
+  geom_line(aes(y = value_20, col = "2020"), lty = 5, lwd = 0.8) +
+  geom_ribbon(aes(ymin = value_20, ymax = value_hist), fill = "cadetblue", lty = 0, alpha = 0.3) +
+  scale_x_date(date_labels = "%b", breaks = "2 months") +
+  facet_wrap(~outcome, scales = "free", ncol = 2) +
+  geom_vline(xintercept = as.Date("1991-03-23"), linetype = "dashed", col = "darkgrey") +
+  geom_vline(xintercept = as.Date("1991-11-05"), linetype = "dashed", col = "darkgrey") +
+  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 16),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(angle = 60, hjust = 1, size = 12),
+        legend.position = "top",
+        plot.background = element_blank(),
+        panel.background = element_blank(),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.background = element_rect(fill = bkg_colour, colour = NA),
+        strip.background = element_rect(fill = bkg_colour, colour =  NA),
+        strip.text = element_text(size = 12, hjust = 0),
+        panel.grid.major = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
+        panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3))) +
+  scale_color_manual(name = "",
+                     breaks = c("2017-2019 average", "2020"),
+                     labels = c("2017-2019 average", "2020"),
+                     values = colors)
+figure_2020_hist
+
+figure_2021_hist <- ggplot(plot_2021, aes(x = plotWeek, y = value, group = year)) +
+  geom_line(data = filter(plot_2021, year == 2017), alpha = 0.2) +  
+  geom_line(data = filter(plot_2021, year == 2018), alpha = 0.2) +   
+  geom_line(data = filter(plot_2021, year == 2019), alpha = 0.2) +
+  geom_line(aes(y = value_hist, col = "2017-2019 average"), lwd = 1.2) +
+  geom_line(aes(y = value_20, col = "2021"), lty = 5, lwd = 0.8) +
+  geom_ribbon(aes(ymin = value_20, ymax = value_hist), fill = "coral", lty = 0, alpha = 0.3) +
+  scale_x_date(date_labels = "%b", breaks = "2 months") +
+  xlim(as.Date("1991-01-01"), as.Date("1991-04-30"))+
+  facet_wrap(~outcome, scales = "free", ncol = 2) +
+  geom_vline(xintercept = as.Date("1991-01-06"), linetype = "dashed", col = "darkgrey") +
+  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 16),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(angle = 60, hjust = 1, size = 12),
+        legend.position = "top",
+        plot.background = element_blank(),
+        panel.background = element_blank(),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.background = element_rect(fill = bkg_colour, colour = NA),
+        strip.background = element_rect(fill = bkg_colour, colour =  NA),
+        strip.text = element_text(size = 12, hjust = 0),
+        panel.grid.major = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
+        panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3))) +
+  scale_color_manual(name = "",
+                     breaks = c("2017-2019 average", "2021"),
+                     labels = c("2017-2019 average", "2021"),
+                     values = colors)
+figure_2021_hist
+ggsave(plot = figure_2021_hist,'plots/descriptive/overall_2021_historical_comparison.pdf', width = 11.69, height = 8.27, units = "in")
 

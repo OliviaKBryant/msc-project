@@ -79,7 +79,7 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     group_by(week, agegroup) %>%
     summarise(numOutcome = n()) %>%
     mutate(
-      weekDate = startDate + (7*(week-1)),
+      weekDate = startDate + (7 * (week - 1)),
       stratifier = 'age',
       category = agegroup) %>%
     select('weekDate','week','numOutcome', 'stratifier', 'category') %>%
@@ -91,7 +91,7 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     group_by(week, gender) %>%
     summarise(numOutcome = n()) %>%
     mutate(
-      weekDate = startDate + (7*(week-1)),
+      weekDate = startDate + (7 * (week - 1)),
       stratifier = 'gender',
       category = gender) %>%
     select('weekDate','week','numOutcome', 'stratifier', 'category') %>%
@@ -103,7 +103,7 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     group_by(week, ethnicity) %>%
     summarise(numOutcome = n()) %>%
     mutate(
-      weekDate = startDate + (7*(week-1)),
+      weekDate = startDate + (7 * (week - 1)),
       stratifier = 'ethnicity',
       category = ethnicity) %>%
     select('weekDate','week','numOutcome', 'stratifier', 'category') %>%
@@ -115,7 +115,7 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     group_by(week, region) %>%
     summarise(numOutcome = n()) %>%
     mutate(
-      weekDate = startDate + (7*(week-1)),
+      weekDate = startDate + (7 * (week - 1)),
       stratifier = 'region',
       category = region) %>%
     select('weekDate','week','numOutcome', 'stratifier', 'category') %>%
