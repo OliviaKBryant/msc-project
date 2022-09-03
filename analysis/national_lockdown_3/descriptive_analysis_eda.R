@@ -40,12 +40,14 @@ weeklyDenoms <- read_dta('datafiles/denoms/cr_overall_weekly_denoms.dta')
 
 weeklyDenoms <- weeklyDenoms %>%
   mutate(year = year(weekDate)) %>%
+  arrange(weekDate) %>%
   group_by(year, stratifier, category) %>%
-  summarize(count = sum(numEligible)) %>%
+  filter(row_number() == 1) %>%
   group_by(year) %>%
-  mutate(year_total = max(count),
-         percentage = round((count/year_total)*100, 2))
+  mutate(strat_total = max(numEligible)) %>%
+  mutate(percentage = roun((numEligible / strat_total) * 100), 2)
 
+write.csv(weeklyDenoms, "plots/descriptive/overall_population_summary.csv")
 #-------------------------------------------------------------------------------
 # Overall outcomes plot
 #-------------------------------------------------------------------------------
