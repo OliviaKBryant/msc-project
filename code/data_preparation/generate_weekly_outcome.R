@@ -40,10 +40,10 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     mutate(
       studyday = as.numeric(eventdate - startDate + 1),
       year = year(eventdate),
-      age = year-yob,
+      age = year - yob,
       region = replace(region, region == "", 12)) %>%
     filter(age >= 11 & age <= 100) %>%
-    mutate(agegroup = factor(10*ceiling(age/10)))
+    mutate(agegroup = factor(10 * ceiling(age / 10)))
   
   # Generate number of weeks
   maxDays <- max(studyData$studyday)
@@ -67,7 +67,7 @@ weekly_outcome <- function(observationData, patientData, weeklyDenoms, startDate
     group_by(week) %>%
     summarise(numOutcome = n()) %>%
     mutate(
-      weekDate = startDate + (7*(week - 1)),
+      weekDate = startDate + (7 * (week - 1)),
       stratifier = 'overall',
       category = 1) %>%
     select('weekDate','week','numOutcome', 'stratifier', 'category') %>%
