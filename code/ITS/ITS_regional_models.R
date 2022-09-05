@@ -244,7 +244,7 @@ binomial_its_function_regional <- function(outcomes_vec = outcomes,
     ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]
     
     ## fit model, calculate lagged residuals to fit in final model
-    binom_model1 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + I(time-ldn_centre) + group + group:lockdown + as.factor(months) , family=binomial, data = filter(df_outcome, !is.na(lockdown)))
+    binom_model1 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + group + group:lockdown + as.factor(months) , family=binomial, data = filter(df_outcome, !is.na(lockdown)))
     ci.exp(binom_model1)
     binom_lagres <- lag(residuals(binom_model1)) %>% as.numeric()
     res1 <- residuals(binom_model1,type="deviance")
@@ -255,7 +255,7 @@ binomial_its_function_regional <- function(outcomes_vec = outcomes,
       mutate_at("months", ~as.factor(.)) 
     
     ## fit model with lagged residuals 
-    binom_model2 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + timeC + group + group:lockdown + as.factor(months)  + binom_lagres, family=binomial, data = filter(model_data, !is.na(lockdown)))
+    binom_model2 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + group + group:lockdown + as.factor(months) + binom_lagres, family=binomial, data = filter(model_data, !is.na(lockdown)))
     ci.exp(binom_model2)
     summary.glm(binom_model2)
     
