@@ -49,11 +49,11 @@ format_counts_table <- function(outcome, df_outcome, df_se, start_lockdown, lock
            target_3mo = mo3_post_ldn,
            days2 = abs(target_1mo - weekPlot),
            days3 = abs(target_3mo - weekPlot),
-           # estimated number of weekly ooutcomes with NO LOCKDOWN
+           # estimated number of weekly outcomes with NO LOCKDOWN
            col1 = paste0(prettyNum(probline_noLdn * 1e6,big.mark=",", digits = 1, scientific=FALSE), 
                          " (", prettyNum(lci_noLdn * 1e6,big.mark=",", digits = 1, scientific=FALSE), 
                          " - ", prettyNum(uci_noLdn * 1e6,big.mark=",", digits = 1, scientific=FALSE),")"),
-           # estimated number of weekly ooutcomes with LOCKDOWN
+           # estimated number of weekly outcomes with LOCKDOWN
            col3 = paste0(prettyNum(predicted_vals * 1e6,big.mark=",", digits = 1, scientific=FALSE), 
                          " (", prettyNum(lci * 1e6,big.mark=",",digits = 1, scientific=FALSE), 
                          " - ", prettyNum(uci * 1e6,big.mark=",",digits = 1, scientific=FALSE),")")

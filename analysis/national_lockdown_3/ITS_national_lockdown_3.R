@@ -244,6 +244,19 @@ its_counts_poisson_function(outcome = outcomes,
                             table_path = "plots/national_lockdown_3/poisson/poisson_counts_7wks_8March.csv")
 dev.off()
 
+# Poisson Counts ITS 3 week adjustment: 22th March ------------------------------
+pdf(file = here::here("plots/national_lockdown_3/poisson", paste0("ThirdLockdown_3wks_2ndhMarch", ".pdf")), 
+    width = 13, height = 10)
+its_counts_poisson_function(outcome = outcomes,
+                            cut_data = as.Date("2020-03-22"),
+                            start_lockdown = as.Date("2021-01-05"),
+                            lockdown_adjustment_period_wks = 3,
+                            end_post_lockdown_period = as.Date("2021-08-01"),
+                            display_from = as.Date("2020-09-01"),
+                            table_path = "plots/national_lockdown_3/poisson/poisson_counts_3wks_22March.csv")
+dev.off()
+
+
 #-------------------------------------------------------------------------------
 # NEGATIVE BINOMIAL ITS
 #-------------------------------------------------------------------------------

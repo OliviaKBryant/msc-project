@@ -113,6 +113,6 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_3wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/poisson_counts_3wks_22March.csv")
 dev.off()
 

@@ -58,7 +58,7 @@ its_counts_poisson_function <- function(outcomes,
         lagres1 <- lag(residuals(po_model1))
         
         ## full model with lagged residuals
-        po_model2 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time + I(time-ldn_centre):lockdown + as.factor(months)   + lagres1, family=quasipoisson, data = filter(df_outcome, !is.na(lockdown)))
+        po_model2 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time + I(time-ldn_centre):lockdown + as.factor(months) + lagres1, family=quasipoisson, data = filter(df_outcome, !is.na(lockdown)))
         
         ## adjust predicted values
         pearson_gof <- sum(residuals(po_model2, type = "pearson")^2)
