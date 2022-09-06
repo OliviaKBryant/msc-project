@@ -100,6 +100,32 @@ binomial_its_function(outcomes_vec = outcomes,
 )
 dev.off()
 
+# Binomial ITS 5 week adjustment: 22nd March ------------------------------------
+pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_5wks_22ndMarch", ".pdf")), 
+    width = 13, height = 14)
+binomial_its_function(outcomes_vec = outcomes,
+                      cut_data = as.Date("2017-01-01"),
+                      start_lockdown = as.Date("2020-03-22"),
+                      lockdown_adjustment_period_wks = 5,
+                      end_post_lockdown_period = as.Date("2021-05-31"),
+                      display_from = as.Date("2020-01-01"),
+                      table_path = "plots/national_lockdown_1"
+)
+dev.off()
+
+# Binomial ITS 7 week adjustment: 22nd March ------------------------------------
+pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_7wks_22ndMarch", ".pdf")), 
+    width = 13, height = 14)
+binomial_its_function(outcomes_vec = outcomes,
+                      cut_data = as.Date("2017-01-01"),
+                      start_lockdown = as.Date("2020-03-22"),
+                      lockdown_adjustment_period_wks = 7,
+                      end_post_lockdown_period = as.Date("2021-05-31"),
+                      display_from = as.Date("2020-01-01"),
+                      table_path = "plots/national_lockdown_1"
+)
+dev.off()
+
 # Binomial ITS 3 week adjustment: 22nd March - NO XMAS --------------------------
 pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_3wks_22ndMarch_noXmas", ".pdf")), 
     width = 13, height = 14)
@@ -166,7 +192,29 @@ its_counts_poisson_function(outcome = outcomes,
                             table_path = "plots/national_lockdown_1/poisson_counts_3wks_22March.csv")
 dev.off()
 
+# Poisson Counts ITS 5 week adjustment: 22nd March ------------------------------
+pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_5wks_22ndMarch_Poisson", ".pdf")), 
+    width = 13, height = 10)
+its_counts_poisson_function(outcome = outcomes,
+                            cut_data = as.Date("2017-01-01"),
+                            start_lockdown = as.Date("2020-03-22"),
+                            lockdown_adjustment_period_wks = 5,
+                            end_post_lockdown_period = as.Date("2021-05-31"),
+                            display_from = as.Date("2020-01-01"),
+                            table_path = "plots/national_lockdown_1/poisson_counts_5wks_22March.csv")
+dev.off()
 
+# Poisson Counts ITS 7 week adjustment: 22nd March ------------------------------
+pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_7wks_22ndMarch_Poisson", ".pdf")), 
+    width = 13, height = 10)
+its_counts_poisson_function(outcome = outcomes,
+                            cut_data = as.Date("2017-01-01"),
+                            start_lockdown = as.Date("2020-03-22"),
+                            lockdown_adjustment_period_wks = 7,
+                            end_post_lockdown_period = as.Date("2021-05-31"),
+                            display_from = as.Date("2020-01-01"),
+                            table_path = "plots/national_lockdown_1/poisson_counts_7wks_22March.csv")
+dev.off()
 #-------------------------------------------------------------------------------
 # NEGATIVE BINOMIAL ITS
 #-------------------------------------------------------------------------------
