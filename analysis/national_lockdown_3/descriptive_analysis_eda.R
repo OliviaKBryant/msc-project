@@ -13,6 +13,7 @@ library(here)
 library(lubridate)
 library(scales)
 library(patchwork)
+library(forcats)
 source("code/plot_code/descriptive_plot_code.R")
 
 lockdownFiles <- list.files(here::here("analysis_data/national_lockdown_3/"), 
@@ -91,12 +92,55 @@ all_outcomes_gender <- all_outcomes %>%
   filter(stratifier == 'gender') %>%
   filter(weekDate >= "2020-01-01")
 
+gender_plot_df <- all_outcomes_gender %>%
+  mutate("category_cat" = recode(all_outcomes_gender$category,
+                                 `1` = "Female",  
+                                 `2` = "Male"))
+
 all_outcomes_ethnicity <- all_outcomes %>%
   filter(stratifier == 'ethnicity') %>%
   filter(weekDate >= "2020-01-01") 
 
-stratified_plot(all_outcomes_gender)
-stratified_plot(all_outcomes_ethnicity)
+ethnicity_plot_df <- all_outcomes_ethnicity %>%
+  mutate("category_cat" = recode(all_outcomes_ethnicity$category,
+                                 `0` = "White",  
+                                 `1` = "South Asian",
+                                 `2` = "Black",
+                                 `3` = "Other",
+                                 `4` = "Mixed",
+                                 `5` = "Not stated"))
+# plot for regional differences
+all_outcomes_regions <- all_outcomes %>%
+  filter(stratifier == "region") %>%
+  filter(category_cat != 12) %>%
+  drop_na() %>%
+  filter(weekDate >= "2020-01-01") 
+
+all_outcomes_regions <- all_outcomes_regions%>%
+  mutate("category_cat" = recode(all_outcomes_regions$category,
+                                `1` = "North",  
+                                `2` = "North", 
+                                `3` = "North",
+                                `4` = "Midlands",   
+                                `5` = "Midlands",  
+                                `6` = "Midlands", 
+                                `7` = "South",  
+                                `8` = "South",  
+                                `9` = "London", 
+                                `10` = "South",
+                                `11` = "North"))
+  
+regional_plot_df <- all_outcomes_regions %>%
+  group_by(category_cat, weekDate, outcome) %>%
+  summarise(proportion = mean(proportion))
+
+regional_plot <- stratified_plot(regional_plot_df)
+gender_plot <- stratified_plot(gender_plot_df)
+ethnicity_plot <-stratified_plot(ethnicity_plot_df)
+
+ggsave(plot = regional_plot,'plots/descriptive/regional_stratifier_plot.pdf', width = 11.69, height = 8.27, units = "in")
+ggsave(plot = gender_plot,'plots/descriptive/gender_stratifier_plot.pdf', width = 11.69, height = 8.27, units = "in")
+ggsave(plot = ethnicity_plot,'plots/descriptive/ethnicity_stratifier_plot.pdf', width = 11.69, height = 8.27, units = "in")
 
 #-------------------------------------------------------------------------------
 # Pre-pandemic data compared to 2020 and 2021
