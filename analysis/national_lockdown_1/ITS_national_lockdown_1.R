@@ -223,7 +223,7 @@ dev.off()
 # Negative Binomial Counts ITS 3 week adjustment: 8th March ---------------------
 pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_3wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes,
+neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
                             start_lockdown = as.Date("2020-03-08"),
                             lockdown_adjustment_period_wks = 3,
@@ -235,10 +235,10 @@ dev.off()
 # Negative Binomial Counts ITS 5 week adjustment: 8th March --------------------
 pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_5wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes,
+neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
                             start_lockdown = as.Date("2020-03-08"),
-                            lockdown_adjustment_period_wks = 5,
+                            lockdown_adjustment_period_wks = 5, 
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
                             table_path = "plots/national_lockdown_1/neg_binom_counts_5wks_8March.csv")
@@ -247,7 +247,7 @@ dev.off()
 # Negative Binomial Counts ITS 7 week adjustment: 8th March --------------------
 pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_7wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
-its_counts_poisson_function(outcome = outcomes,
+neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
                             start_lockdown = as.Date("2020-03-08"),
                             lockdown_adjustment_period_wks = 7,

@@ -34,11 +34,12 @@ for(ii in 1:length(outcomes)){
 }
 
 # split data into two tier groups ----------------------------------------------
-# high tier: London, North East, North West, South West, West Midlands
-# low tier: East Midlands, East of England, South Central, South East Coast, Yorkshire
+# high tier: North East, North West, Yorkshire, East Midlands, London
+# low tier: West Midlands, East of England, South West, South Central, South East
+# Coast
 
-low_group <- c(1, 2, 5, 7, 9)
-high_group <- c(3, 4, 6, 8, 10)
+high_group <- c(1, 2, 3, 4, 9)
+low_group <- c(5, 6, 7, 8, 10)
 
 anxiety_high <- split_regional_data('anxiety', high_group)
 anxiety_low <- split_regional_data('anxiety', low_group)
@@ -77,7 +78,6 @@ binomial_its_function_group(outcomes_vec = outcomes,
                       start_lockdown = as.Date("2020-10-14"),
                       lockdown_adjustment_period_wks = 3,
                       end_post_lockdown_period = as.Date("2021-03-31"),
-                      chop_selfharm = F, 
                       display_from = as.Date("2020-04-01"),
                       table_path = "plots/regional_restrictions/high",
                       group = "high_tier",
@@ -94,6 +94,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-03-31"),
                             display_from = as.Date("2020-04-01"),
+                            remove_xmas = TRUE,
                             table_path = "plots/regional_restrictions/high/poisson_counts_3wks_high_tier.csv")
 dev.off()
 
@@ -118,8 +119,8 @@ binomial_its_function_group(outcomes_vec = outcomes,
                       end_post_lockdown_period = as.Date("2021-04-30"),
                       display_from = as.Date("2020-04-01"),
                       table_path = "plots/regional_restrictions/low",
-                      remove_xmas = TRUE,
                       group = "low_tier",
+                      remove_xmas = TRUE,
                       incl_no_ldn_ribbon = FALSE
                       
 )
@@ -167,9 +168,9 @@ binomial_its_function_regional(outcomes_vec = outcomes,
                             start_lockdown = as.Date("2020-10-14"),
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-03-31"),
-                            chop_selfharm = FALSE, 
+                            chop_selfharm = TRUE, 
+                            remove_xmas = TRUE,
                             display_from = as.Date("2020-04-01"),
-                            table_path = "plots/regional_restrictions/",
-                            remove_xmas = TRUE
+                            table_path = "plots/regional_restrictions/"
                             
 )

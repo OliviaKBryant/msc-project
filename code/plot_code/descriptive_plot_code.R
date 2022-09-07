@@ -5,12 +5,12 @@
 # Notes: plot helper functions for descriptive analysis
 #-------------------------------------------------------------------------------
 
-overall_outcome_plot <- function(data, title, label, startDate) {
+overall_outcome_plot <- function(data, title, startDate) {
   data <- data %>%
     filter(stratifier == 'overall') %>%
     filter(weekDate >= startDate) %>%
     mutate(proportion = (numOutcome/numEligible)*100)
-  figure <- ggplot(data, aes(x =as.Date(weekDate), y = proportion)) +
+  figure <- ggplot(data, aes(x = as.Date(weekDate), y = proportion)) +
   geom_line() +
   geom_point(size = 0.1) +
   xlab("Date") +
@@ -25,41 +25,11 @@ overall_outcome_plot <- function(data, title, label, startDate) {
         axis.text.x = element_text(angle = 70, hjust = 1),
         axis.text.y = element_text()) +
   scale_x_date(date_labels = "%b %Y", breaks = breaks_pretty(10),labels = scales::label_date_short())+
-    expand_limits(y=0) +
-  annotate("rect", # first lockdown
-           fill = "red", 
-           alpha = 0.2,
-           xmin = as.Date("2020-03-23"), 
-           xmax = as.Date("2020-05-17"),
-           ymin=-Inf, ymax=Inf) + 
-  annotate("rect", # second lockdown
-           fill = "red", 
-           alpha = 0.2, 
-           xmin = as.Date("2020-11-05"), 
-           xmax = as.Date("2020-12-02"),
-           ymin=-Inf, 
-           ymax=Inf) +
-  annotate("rect", # third lockdown
-           fill = "red", 
-           alpha = 0.2, 
-           xmin = as.Date("2021-01-05"), 
-           xmax = as.Date("2021-04-12"),
-           ymin=-Inf, 
-           ymax=Inf) +
-  annotate("rect", # tier restrictions 1
-           fill = "blue",
-           alpha = 0.2,
-           xmin = as.Date("2020-10-14"),
-           xmax = as.Date("2020-11-05"),
-           ymin=-Inf, 
-           ymax=Inf) +
-  annotate("rect", # tier restrictions 2
-           fill = "blue",
-           alpha = 0.2,
-           xmin = as.Date("2020-12-02"),
-           xmax = as.Date("2020-12-19"),
-           ymin=-Inf, 
-           ymax=Inf)
+    expand_limits(y = 0) +
+    geom_vline(xintercept = as.Date("2020-12-25"), linetype="dotted") + 
+    geom_vline(xintercept = as.Date("2019-12-25"), linetype="dotted") +
+    geom_vline(xintercept = as.Date("2018-12-25"), linetype="dotted") +
+    geom_vline(xintercept = as.Date("2017-12-25"), linetype="dotted") 
   return(figure)
 }
 

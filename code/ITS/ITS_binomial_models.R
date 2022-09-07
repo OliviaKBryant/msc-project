@@ -250,6 +250,7 @@ neg_binomial_counts_function <- function(outcomes,
                                         lockdown_adjustment_period_wks = 3,
                                         end_post_lockdown_period = as.Date("2020-08-01"),
                                         display_from = as.Date("2020-01-01"),
+                                        remove_xmas = TRUE,
                                         table_path) {
   
   
@@ -258,6 +259,12 @@ neg_binomial_counts_function <- function(outcomes,
                                       lockdown_adjustment_period_wks, 
                                       end_post_lockdown_period,
                                       cut_data)
+    
+    if(remove_xmas){
+      df_outcome <- df_outcome %>%
+        filter(xmas == 0)
+    }
+    
     
     # start of post-lockdown period
     ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]

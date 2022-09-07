@@ -30,7 +30,7 @@ binomial_proportion_plot <- function(data, start_lockdown, display_from,
     facet_wrap(~outcome_name, scales = "free", ncol = 3) +
     geom_vline(xintercept = c(abline_min, 
                               abline_max), col = 1, lwd = 1) + 
-    labs(y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+    labs(y = "% Study Population With Contacts for Condition", caption = "OCD: Obsessive Compulsive Disorder") +
     theme_classic() +
     theme(axis.title = element_text(size = 26), 
           axis.title.x = element_blank(),

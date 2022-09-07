@@ -8,7 +8,7 @@ population_est <- read.csv("analysis_data/regional_restrictions/ONS_populaton_es
 tier_restrict = tiers %>% 
   right_join(population_est,by=c("ltla_code"="area_code"), keep=FALSE) %>%
   mutate(population = estimate_over_16_2019) %>%
-  select(-region_code, -region_name, -area_name, -estimate_over_16_2019) %>%
+  dplyr::select(-region_code, -region_name, -area_name, -estimate_over_16_2019) %>%
   filter(tier != "lockdown") %>%
   mutate(tier = as.numeric(tier)) %>%
   mutate(date = as.Date(date, format="%d/%m/%Y")) %>%
@@ -32,7 +32,7 @@ for(region in unique(tier_scores_plot$health_authority)){
 tier_scores <- tier_scores[complete.cases(tier_scores), ]
 
 # plot tier scores over time to assess patterns
-ggplot(tier_scores, aes(x=date, y=tier_score, group=health_authority, color=health_authority)) +
+tiers_time <- ggplot(tier_scores, aes(x=date, y=tier_score, group=health_authority, color=health_authority)) +
   geom_line()+
   theme(plot.background = element_rect(fill = "white", colour = "white"),
         panel.background = element_rect(fill = "white", colour = "white"),
@@ -50,12 +50,22 @@ ggplot(tier_scores, aes(x=date, y=tier_score, group=health_authority, color=heal
            ymax=Inf) +
   labs(x = "Date", y = "Tier Score", color = "Health Authority")
 
+
+ggsave(plot = tiers_time,'plots/descriptive/tier_scores_time.pdf', width = 11, height = 8.27, units = "in")
+
+
 # table of number of days with tier score 2 or above
 tier_above_2 <- tier_scores %>%
   mutate(two_plus = ifelse(tier_score >= 2, 1, 0)) %>%
   group_by(health_authority) %>%
   summarise(sum_two_plus = sum(two_plus))
 tier_above_2
+
+tier_above_2half <- tier_scores %>%
+  mutate(two_half_plus = ifelse(tier_score >= 2.5, 1, 0)) %>%
+  group_by(health_authority) %>%
+  summarise(sum_two_half_plus = sum(two_half_plus))
+tier_above_2half
 
 # percentage of population in at least tier 2
 total_pop_region <- tier_restrict %>%

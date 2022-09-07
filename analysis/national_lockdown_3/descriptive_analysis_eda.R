@@ -50,18 +50,19 @@ weeklyDenoms <- weeklyDenoms %>%
 
 write.csv(weeklyDenoms, "plots/descriptive/overall_population_summary.csv")
 #-------------------------------------------------------------------------------
-# Overall outcomes plot
+# Overall outcomes plot - showing Christmas
 #-------------------------------------------------------------------------------
 
-p1 <- overall_outcome_plot(anxiety, "Anxiety", 0.01, "2020-01-01")
-p2 <- overall_outcome_plot(depression, "Depression", 0.01, "2020-01-01")
-p3 <- overall_outcome_plot(ocd, "OCD", 0.001, "2020-01-01")
-p4 <- overall_outcome_plot(feedingdisorder, "Feeding Disorder", 0.002, "2020-01-01")
-p5 <- overall_outcome_plot(selfharm, "Self Harm", 0.001, "2020-01-01")
-p6 <- overall_outcome_plot(smi, "Severe Mental Illness", 0.01, "2020-01-01")
+p1 <- overall_outcome_plot(anxiety, "Anxiety", "2017-01-01")
+p2 <- overall_outcome_plot(depression, "Depression", "2017-01-01")
+p3 <- overall_outcome_plot(ocd, "OCD", "2017-01-01")
+p4 <- overall_outcome_plot(feedingdisorder, "Feeding Disorder", "2017-01-01")
+p5 <- overall_outcome_plot(selfharm, "Self Harm", "2017-01-01")
+p6 <- overall_outcome_plot(smi, "Severe Mental Illness","2017-01-01")
 
-overall_outcome <- (p1 + p2) / (p3 + p4) / (p5 + p6) 
-ggsave(plot = overall_outcome,'plots/descriptive/overall_outcomes.pdf', width = 11.69, height = 8.27, units = "in")
+overall_outcome <- (p1 + p2) / (p3 + p4) / (p5 + p6)
+overall_outcome
+ggsave(plot = overall_outcome,'plots/descriptive/overall_outcomes.pdf', width = 11, height = 8.27, units = "in")
 
 
 #-------------------------------------------------------------------------------
@@ -167,7 +168,7 @@ figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)
   scale_x_date(date_labels = "%b", breaks = "2 months") +
   facet_wrap(~outcome, scales = "free", ncol = 2) +
   geom_vline(xintercept = as.Date("1991-03-23"), linetype = "dashed", col = 2) +
-  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  labs(x = "Date", y = "% Study Population With Contacts for Condition", caption = "OCD: Obsessive Compulsive Disorder") +
   theme_classic() +
   theme(axis.title = element_text(size = 16),
         axis.text.y = element_text(size = 12),
@@ -215,7 +216,7 @@ figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)
   facet_wrap(~outcome, scales = "free", ncol = 2) +
   geom_vline(xintercept = as.Date("1991-03-23"), linetype = "dashed", col = "darkgrey") +
   geom_vline(xintercept = as.Date("1991-11-05"), linetype = "dashed", col = "darkgrey") +
-  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  labs(x = "Date", y = "% Study Population With Contacts for Condition", caption = "OCD: Obsessive Compulsive Disorder") +
   theme_classic() +
   theme(axis.title = element_text(size = 16),
         axis.text.y = element_text(size = 12),
@@ -249,7 +250,7 @@ figure_2021_hist <- ggplot(plot_2021, aes(x = plotWeek, y = value, group = year)
   facet_wrap(~outcome, scales = "free", ncol = 2) +
   xlim(c(as.Date("1990-12-31"), as.Date("1991-05-01")))+
   geom_vline(xintercept = as.Date("1991-01-06"), linetype = "dashed", col = "darkgrey") +
-  labs(x = "Date", y = "% of people consulting for condition", caption = "OCD: Obsessive Compulsive Disorder") +
+  labs(x = "Date", y = "% Study Population With Contacts for Condition", caption = "OCD: Obsessive Compulsive Disorder") +
   theme_classic() +
   theme(axis.title = element_text(size = 16),
         axis.text.y = element_text(size = 12),
