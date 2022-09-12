@@ -71,7 +71,7 @@ format_historical_plot_data <- function(outcome, year_include, year_exclude){
   
   plot_year_include <- df_outcome %>%
     filter(year == year_include) %>% 
-    select(week, "value_20" = value) 
+    dplyr::select(week, "value_20" = value) 
   
   plot_historical <- df_outcome %>%
     filter(year != year_include) %>%

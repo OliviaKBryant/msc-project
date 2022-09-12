@@ -42,7 +42,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 3,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -55,7 +55,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 5,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -68,7 +68,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 7,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -81,7 +81,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 3,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1",
+                      table_path = "plots/national_lockdown_1/binomial",
                       remove_xmas = TRUE
 )
 dev.off()
@@ -96,7 +96,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 3,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -109,7 +109,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 5,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -122,7 +122,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 7,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1"
+                      table_path = "plots/national_lockdown_1/binomial"
 )
 dev.off()
 
@@ -135,7 +135,7 @@ binomial_its_function(outcomes_vec = outcomes,
                       lockdown_adjustment_period_wks = 3,
                       end_post_lockdown_period = as.Date("2021-05-31"),
                       display_from = as.Date("2020-01-01"),
-                      table_path = "plots/national_lockdown_1",
+                      table_path = "plots/national_lockdown_1/binomial",
                       remove_xmas = TRUE
 )
 dev.off()
@@ -153,7 +153,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_3wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_3wks_8March.csv")
 dev.off()
 
 # Poisson Counts ITS 5 week adjustment: 8th March ------------------------------
@@ -165,7 +165,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 5,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_5wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_5wks_8March.csv")
 dev.off()
 
 # Poisson Counts ITS 7 week adjustment: 8th March ------------------------------
@@ -177,7 +177,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 7,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_7wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_7wks_8March.csv")
 dev.off()
 
 # Poisson Counts ITS 3 week adjustment: 22nd March ------------------------------
@@ -189,7 +189,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_3wks_22March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_3wks_22March.csv")
 dev.off()
 
 # Poisson Counts ITS 5 week adjustment: 22nd March ------------------------------
@@ -201,7 +201,7 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 5,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_5wks_22March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_5wks_22March.csv")
 dev.off()
 
 # Poisson Counts ITS 7 week adjustment: 22nd March ------------------------------
@@ -213,8 +213,9 @@ its_counts_poisson_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 7,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/poisson_counts_7wks_22March.csv")
+                            table_path = "plots/national_lockdown_1/poisson/poisson_counts_7wks_22March.csv")
 dev.off()
+
 #-------------------------------------------------------------------------------
 # NEGATIVE BINOMIAL ITS
 #-------------------------------------------------------------------------------
@@ -229,7 +230,7 @@ neg_binomial_counts_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 3,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/neg_binom_counts_3wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/binomial/neg_binom_counts_3wks_8March.csv")
 dev.off()
 
 # Negative Binomial Counts ITS 5 week adjustment: 8th March --------------------
@@ -241,7 +242,7 @@ neg_binomial_counts_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 5, 
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/neg_binom_counts_5wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/binomial/neg_binom_counts_5wks_8March.csv")
 dev.off()
 
 # Negative Binomial Counts ITS 7 week adjustment: 8th March --------------------
@@ -253,6 +254,6 @@ neg_binomial_counts_function(outcome = outcomes,
                             lockdown_adjustment_period_wks = 7,
                             end_post_lockdown_period = as.Date("2021-05-31"),
                             display_from = as.Date("2020-01-01"),
-                            table_path = "plots/national_lockdown_1/neg_binom_counts_7wks_8March.csv")
+                            table_path = "plots/national_lockdown_1/binomial/neg_binom_counts_7wks_8March.csv")
 dev.off()
 

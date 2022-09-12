@@ -189,7 +189,7 @@ figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)
                      breaks = c("2017-2019 average", "2020"),
                      labels = c("2017-2019 average", "2020"),
                      values = colors)
-figure_2020_hist
+
 ggsave(plot = figure_2020_hist,'plots/descriptive/overall_2020_historical_comparison.pdf', width = 11.69, height = 8.27, units = "in")
 
 plot_2021 <- NULL
@@ -237,7 +237,6 @@ figure_2020_hist <- ggplot(plot_2020, aes(x = plotWeek, y = value, group = year)
                      breaks = c("2017-2019 average", "2020"),
                      labels = c("2017-2019 average", "2020"),
                      values = colors)
-figure_2020_hist
 
 figure_2021_hist <- ggplot(plot_2021, aes(x = plotWeek, y = value, group = year)) +
   geom_line(data = filter(plot_2021, year == 2017), alpha = 0.2) +  
@@ -271,6 +270,6 @@ figure_2021_hist <- ggplot(plot_2021, aes(x = plotWeek, y = value, group = year)
                      breaks = c("2017-2019 average", "2021"),
                      labels = c("2017-2019 average", "2021"),
                      values = colors)
-figure_2021_hist
+
 ggsave(plot = figure_2021_hist,'plots/descriptive/overall_2021_historical_comparison.pdf', width = 11.69, height = 8.27, units = "in")
 
