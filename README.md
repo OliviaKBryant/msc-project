@@ -28,12 +28,15 @@ ITS_regional_model.R - contains an adapted version of the binomial GLM function 
 ITS_help_functions.R - contains helper functions for the ITS including formatting tables and formatting outcome data.
 
 ###### data_preparation
+
 - contains the function to generate the CSV files in analysis_data and runs the function for each of the outcomes and periods of restrictions.
 
 ###### plot_code
+
 - contains functions for plots used in the ITS and the descriptive analysis.
 
 ##### plots
+
 - contains folders for each of the studies: descriptive, first national lockdown, third national lockdown, regional restrictions
 - contains all of the tables and figures created from running the files in analysis.
 
