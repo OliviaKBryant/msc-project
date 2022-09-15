@@ -1,2 +1,4 @@
-# Assessing the Indirect Effects of COVID-19 Restrictions on Primary Care Contacts for Mental Health in England Using CPRD Aurum![image](https://user-images.githubusercontent.com/31545379/190493503-bfbe79d5-ade2-49eb-b9f3-aa42d1c60347.png)
+# Assessing the Indirect Effects of COVID-19 Restrictions on Primary Care Contacts for Mental Health in England Using CPRD Aurum
+
+This is a study assessing the impact of COVID-19 restrictinos in England on primary care contacts for anxiety, depression, OCD, self-harm, eating disorders, and severe mental illness using data from the Clinical Research Practice Datalink (CPRD) Aurum database. [Mansfield et al (2021)](https://www.thelancet.com/journals/landig/article/PIIS2589-7500(21)00017-0/fulltext) found evidence that there had been a significant reduction in primary care contacts for mental health illnesses following the start of the first COVID-19 lockdown. This study aims to extend the work of the original study by repeating the study with updated data to assess the impacts of the third national lockdown and the three-tier regional restrictions.
 
