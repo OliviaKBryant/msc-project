@@ -3,7 +3,8 @@
 # Program Name: ITS Binomial Models
 # Authors: Alasdair Henderson, Olivia Bryant
 # Date Updated: 23/08/2022
-# Notes: ITS analysis of lockdown on multiple outcomes using Poisson models
+# Notes: ITS analysis of lockdown on multiple outcomes using binomial and 
+# negative binomial models
 # Ref:
 #-------------------------------------------------------------------------------
 source("code/ITS/ITS_help_functions.R")
@@ -25,6 +26,17 @@ library(dplyr)
 library(tidyr)
 library(MASS)
 
+#-------------------------------------------------------------------------------
+# BINOMIAL ITS FUNCTION
+# ITS function that uses binomial GLM to model proportion with primary care 
+# contacts for outcomes
+# Inputs: cut_data is the date of the start of the pre-interruption period.
+# table_path is the relative path where the user wants to save the counts
+# table
+# incl_no_ldn_ribbon is a Boolean of whether to include the 95% CI ribbon for
+# the counterfactual predictions
+# Outputs: plot of counterfactual vs observed counts. CSV of estimated ORs for
+# level change at table path provided. CSV of estimated recovery ORs.
 binomial_its_function <- function(outcomes_vec = outcomes,
 												 cut_data = as.Date("2018-01-01"),
 												 start_lockdown =   as.Date("2020-03-08"),
@@ -56,7 +68,10 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 			ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]
 			
 			## fit model, calculate lagged residuals to fit in final model
-			binom_model1 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + I(time-ldn_centre) + I(time-ldn_centre):lockdown + as.factor(months) , family=binomial, data = filter(df_outcome, !is.na(lockdown)))
+			binom_model1 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown 
+			                    + I(time-ldn_centre) + I(time-ldn_centre):lockdown 
+			                    + as.factor(months) , family=binomial, 
+			                    data = filter(df_outcome, !is.na(lockdown)))
 			ci.exp(binom_model1)
 			binom_lagres <- lag(residuals(binom_model1)) %>% as.numeric()
 			res1 <- residuals(binom_model1,type="deviance")
@@ -67,14 +82,17 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 				mutate_at("months", ~as.factor(.)) 
 			
 			## fit model with lagged residuals 
-			binom_model2 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown + timeC + timeC:lockdown + as.factor(months)  + binom_lagres, family=binomial, data = filter(model_data, !is.na(lockdown)))
+			binom_model2 <- glm(as.matrix(cbind(numOutcome, numEligible)) ~ lockdown 
+			                    + timeC + timeC:lockdown + as.factor(months)  
+			                    + binom_lagres, family=binomial, 
+			                    data = filter(model_data, !is.na(lockdown)))
 			ci.exp(binom_model2)
 			summary.glm(binom_model2)
 			
-			## calculate dispersion adjustment parameter -- https://online.stat.psu.edu/stat504/node/162/
-			#Pearson Goodness-of-fit statistic
+			# Pearson Goodness-of-fit statistic
 			pearson_gof <- sum(residuals(binom_model2, type = "pearson")^2)
 			df <- binom_model2$df.residual
+			# calculate deviance adjustment parameter
 			deviance_adjustment <- pearson_gof / df
 			
 			## some manual manipulation to merge the lagged residuals variable back with the original data
@@ -84,12 +102,12 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 			binom_lagres_timing <- bind_cols("time" = model_data$time[!is.na(model_data$lockdown)],
 																			 "binom_lagres" = binom_lagres)
 			
-			## set up data frame to calculate linear predictions
+			# set up data frame to calculate linear predictions
 			outcome_pred <- model_data %>%
 				left_join(binom_lagres_timing, by = "time") %>%
 				mutate_at("binom_lagres", ~(. = 0)) 
 			
-			## set up data frame to calculate linear predictions with month and xmas averaged at Sep
+			# set up data frame to calculate linear predictions with month and xmas averaged at Sep
 			outcome_pred_zeroed <- model_data %>%
 				left_join(binom_lagres_timing, by = "time") %>%
 				mutate_at("binom_lagres", ~(. = 0)) %>%
@@ -97,17 +115,17 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 				mutate_at("year", ~(. = 0)) %>% 
 				mutate_at("months", ~(. = 9)) 
 			
-			## predict values adjusted for overdispersion
+			# predict values adjusted for overdispersion
 			pred1 <- predict(binom_model2, newdata = outcome_pred, se.fit = TRUE, interval="confidence", dispersion = deviance_adjustment)
 			predicted_vals <- pred1$fit
 			stbp <- pred1$se.fit
 			
-			## predict values adjusted for overdispersion
+			# predict values adjusted for overdispersion
 			pred0 <- predict(binom_model2, newdata = outcome_pred_zeroed, se.fit = TRUE, interval="confidence", dispersion = deviance_adjustment)
 			predicted_vals_0 <- pred0$fit
 			stbp0 <- pred0$se.fit
 			
-			## set up data frame to calculate linear predictions with no Lockdown and predict values
+			# set up data frame to calculate linear predictions with no Lockdown and predict values
 			outcome_pred_nointervention <- outcome_pred %>%
 				mutate_at("lockdown", ~(.=0))
 			pred_noLockdown <- predict(binom_model2, newdata = outcome_pred_nointervention, se.fit = TRUE, interval="confidence", dispersion = deviance_adjustment) 
@@ -140,18 +158,18 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 					lci_noLdn = exp(low0_noLdn) / (1 + exp(low0_noLdn)) 
 					)
 			
-			## combine data set and predictions
+			# combine data set and predictions
 			outcome_plot <- bind_cols(outcome_pred, df_se) %>%
 				mutate(var = outcome)
 			
-			## Get ORs for effect of lockdown
+			# Get ORs for effect of lockdown
 			parameter_estimates <- as.data.frame(ci.exp(binom_model2))
 			vals_to_print <- parameter_estimates %>%
 				mutate(var = rownames(parameter_estimates)) %>%
 			  filter(var == "lockdown") %>%
 				mutate(var = outcome)
 			
-			## Get ORs for effect of time on outcome after lockdown (time + interaction of time:lockdown)
+			# Get ORs for effect of time on outcome after lockdown (time + interaction of time:lockdown)
 			interaction_lincom <- glht(binom_model2, linfct = c("timeC + lockdown:timeC = 0"))
 			summary(interaction_lincom)
 			
@@ -160,11 +178,9 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 			interaction_to_print <- time_grad_postLdn %>%
 				mutate(var = outcome)
 			
-			## output
 		return(list(df_1 = outcome_plot, vals_to_print = vals_to_print, interaction_to_print = interaction_to_print))
 		}
 		
-		# the plot ----------------------------------------------------------------
 		main_plot_data <- NULL
 		forest_plot_data <- NULL
 		interaction_tbl_data <- NULL
@@ -183,14 +199,14 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 				)
 		}
 		
-		## convert proportions into percentage 
+		# convert proportions into percentage 
 		main_plot_data <- main_plot_data %>%
 			mutate(pc_consult = (numOutcome / numEligible) * 100) %>%
 			mutate_at(.vars = c("predicted_vals", "lci", "uci", "probline_noLdn", "uci_noLdn", "lci_noLdn", "probline_0", "lci0", "uci0"), 
 								~. * 100) %>%
 			left_join(outcome_of_interest_namematch, by = c("var" = "outcome"))
 		
-		## replace outcome name with the pretty name for printing on results
+		# replace outcome name with the pretty name for printing on results
 		main_plot_data$outcome_name <- factor(main_plot_data$outcome_name, levels = outcome_of_interest_namematch$outcome_name[plot_order])
 		
 		plot1 <- binomial_proportion_plot(main_plot_data, start_lockdown, display_from, incl_no_ldn_ribbon)
@@ -230,7 +246,7 @@ binomial_its_function <- function(outcomes_vec = outcomes,
 		  facet_wrap(~outcome_name, ncol = 1, dir = "h", strip.position = "right") +
 		  theme(strip.text.y = element_text(hjust = 0.5, vjust = 0, angle = 0, size = 10))
 		
-		## uses patchwork package to combine plots
+		# uses patchwork package to combine plots
 		layout = "
 			AAAA
 			AAAA

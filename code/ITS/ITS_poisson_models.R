@@ -4,7 +4,6 @@
 # Authors: Alasdair Henderson, Olivia Bryant
 # Date Updated: 23/08/2022
 # Notes: ITS analysis of lockdown on multiple outcomes using Poisson models
-# Ref:
 #-------------------------------------------------------------------------------
 source("code/ITS/ITS_help_functions.R")
 source("code/plot_code/ITS_plot_code.R")
@@ -24,6 +23,19 @@ library(stringr)
 library(ggplot2)
 library(patchwork)
 
+#-------------------------------------------------------------------------------
+# ITS COUNTS POISSON FUNCTION
+# ITS function that uses Poisson regression to model counts of primary care 
+# contacts.
+# Inputs: cut_data is the date of the start of the pre-interruption period.
+# table_path is the relative path where the user wants to save the counts
+# table
+# incl_no_ldn_ribbon is a Boolean of whether to include the 95% CI ribbon for
+# the counterfactual predictions
+# Outputs: plot of counterfactual vs observed counts. Table of estimated 
+# numbers of primary care contacts with/without lockdown and cumultive 
+# difference.
+
 its_counts_poisson_function <- function(outcomes,
                                         cut_data = as.Date("2018-01-01"),
                                         start_lockdown =   as.Date("2020-03-08"),
@@ -36,15 +48,19 @@ its_counts_poisson_function <- function(outcomes,
                                         incl_no_ldn_ribbon = TRUE) {
   
     
-      plot_outcome <- function(outcome){
+      plot_outcome <- function(outcome) {
         
-        if(outcome == "selfharm" & chop_selfharm){cutData <- as.Date("2019-01-01")}
-        df_outcome <- format_outcome_data(outcome, start_lockdown, 
+        if (outcome == "selfharm" & chop_selfharm) {
+          cutData <- as.Date("2019-01-01")
+        }
+        
+        df_outcome <- format_outcome_data(outcome, 
+                                          start_lockdown, 
                                           lockdown_adjustment_period_wks, 
                                           end_post_lockdown_period,
                                           cut_data)
           
-        if(remove_xmas){
+        if (remove_xmas){
           df_outcome <- df_outcome %>%
             filter(xmas == 0)
         }
@@ -52,47 +68,61 @@ its_counts_poisson_function <- function(outcomes,
         # start of post-lockdown period
         ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]
         
-        ## model Poisson 
-        po_model1 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time + I(time-ldn_centre):lockdown + as.factor(months) , family=quasipoisson, data = filter(df_outcome, !is.na(lockdown)))
+        # Poisson model to obtain residuals  
+        po_model1 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time 
+                         + I(time-ldn_centre):lockdown + as.factor(months) , 
+                         family=quasipoisson, 
+                         data = filter(df_outcome,
+                                       !is.na(lockdown)))
+        
         # get lagged residuals
         lagres1 <- lag(residuals(po_model1))
         
-        ## full model with lagged residuals
-        po_model2 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time + I(time-ldn_centre):lockdown + as.factor(months) + lagres1, family=quasipoisson, data = filter(df_outcome, !is.na(lockdown)))
+        # full model with lagged residuals to adjust for seasonality
+        po_model2 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + 
+                           time + I(time-ldn_centre):lockdown + 
+                           as.factor(months) + lagres1, family=quasipoisson, 
+                         data = filter(df_outcome, !is.na(lockdown)))
         
-        ## adjust predicted values
+        # adjust predicted values with dispersion parameter
         pearson_gof <- sum(residuals(po_model2, type = "pearson")^2)
         df <- po_model2$df.residual
-        deviance_adjustment <- pearson_gof/df
+        deviance_adjustment <- pearson_gof / df
         
         po_lagres_timing <- bind_cols("time" = df_outcome$time[!is.na(df_outcome$lockdown)],
                                       "lagres1" = lagres1)
         
-        ## data frame to predict values from 
+        # sets up data frame to predict values from 
         outcome_pred <- df_outcome %>%
           left_join(po_lagres_timing, by = "time") %>%
           mutate_at("lagres1", ~(. = 0))
         
-        ## predict values
-        pred1 <- predict(po_model2, newdata = outcome_pred, se.fit = TRUE, interval="confidence", dispersion = deviance_adjustment)
+        # predict values if there is a lockdown
+        pred1 <- predict(po_model2, newdata = outcome_pred, se.fit = TRUE, 
+                         interval="confidence", dispersion = deviance_adjustment)
         predicted_vals <- pred1$fit
         stbp <- pred1$se.fit
         
         ## predict values if no lockdown 
         outcome_pred_nointervention <- outcome_pred %>%
           mutate_at("lockdown", ~(. = 0))
-        predicted_vals_nointervention <- predict(po_model2, newdata = outcome_pred_nointervention, se.fit = TRUE, dispersion = deviance_adjustment) 
+        
+        predicted_vals_nointervention <- 
+          predict(po_model2, 
+                  newdata = outcome_pred_nointervention, 
+                  se.fit = TRUE, 
+                  dispersion = deviance_adjustment) 
         stbp_noLdn <- predicted_vals_nointervention$se.fit	
         predicted_vals_noLdn <- predicted_vals_nointervention$fit	
         
-        ## standard errors
+        # calculate standard errors and confidence intervals
         df_se <- bind_cols(stbp = stbp, 
                            pred = predicted_vals, 
                            stbp_noLdn = stbp_noLdn, 
                            pred_noLdn = predicted_vals_noLdn, 
                            denom = df_outcome$numEligible) %>%
           mutate(
-            #CIs
+            # CIs
             upp = pred + (1.96 * stbp),
             low = pred - (1.96 * stbp),
             upp_noLdn = pred_noLdn + (1.96 * stbp_noLdn),
@@ -100,7 +130,7 @@ its_counts_poisson_function <- function(outcomes,
             # probline
             predicted_vals = exp(pred) / denom,
             probline_noLdn = exp(pred_noLdn) / denom,
-            #
+            # CIs converted to estimate number
             uci = exp(upp) / denom,
             lci = exp(low) / denom,
             uci_noLdn = exp(upp_noLdn) / denom,
@@ -113,7 +143,9 @@ its_counts_poisson_function <- function(outcomes,
         outcome_plot <- bind_cols(outcome_pred, df_se) %>%
           mutate(var = outcome)
         
-        table_formatted <- format_counts_table(outcome, df_outcome, df_se, start_lockdown, lockdown_adjustment_period_wks)
+        table_formatted <- 
+          format_counts_table(outcome, df_outcome, df_se, start_lockdown, 
+                              lockdown_adjustment_period_wks)
         return(list(table_formatted = table_formatted, model_output = outcome_plot))
       }
       
@@ -129,6 +161,7 @@ its_counts_poisson_function <- function(outcomes,
         full_table[nrow(full_table) + 1,] <- ""
       }
       
+      # write the counts table to the path provided
       write.csv(full_table, file = here::here(table_path), row.names = F)
       
       main_plot_data <- main_plot_data %>%
@@ -136,8 +169,11 @@ its_counts_poisson_function <- function(outcomes,
                 ~ exp(.)) %>%
         left_join(outcome_of_interest_namematch, by = c("var" = "outcome"))
       
-      main_plot_data$outcome_name <- factor(main_plot_data$outcome_name, levels = outcome_of_interest_namematch$outcome_name[plot_order])
+      main_plot_data$outcome_name <- 
+        factor(main_plot_data$outcome_name, 
+               levels = outcome_of_interest_namematch$outcome_name[plot_order])
       
+      # create Poisson counterfactual vs lockdown plot
       poisson_count_plot(main_plot_data, start_lockdown, display_from, incl_no_ldn_ribbon)
 }
 

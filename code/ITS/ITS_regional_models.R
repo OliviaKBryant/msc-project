@@ -5,7 +5,6 @@
 # Date Updated: 23/08/2022
 # Notes: ITS analysis of regional restrictions by each group separately
 # and modelling the interaction between group and lockdown.
-# Ref:
 #-------------------------------------------------------------------------------
 source("code/ITS/ITS_help_functions.R")
 source("code/plot_code/ITS_plot_code.R")
