@@ -8,7 +8,9 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
   + [analysis_data](#analysis_data)
   + [code](#code)
   + [plots](#plots)
+- [Package versions](#packages)
 
+### Project folder structure
 ##### analysis
 
 - An analysis script for each part of the study (first lockdown, third lockdown, regional restrictions) is provided containing all of the functions run, and their inputs, to get the results of the study. 
@@ -40,4 +42,32 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
 
 - contains folders for each of the studies: descriptive, first national lockdown, third national lockdown, regional restrictions
 - contains all of the tables and figures created from running the files in analysis.
+
+### Dependencies
+
+This project was written using R version 4.1.2 (released 1/11/2021). The project was developed in RStudio Version 1.4.1717.
+
+The packages used and their package versions are as follows:
+
+| Package  | Version  |
+|----------|----------|
+| vcd      | 1.4-10   |
+| MASS     | 7.3-58.1 |
+| Epi      | 2.44     |
+| Epi      | 2.44     |
+| lmtest   | 0.9-40   |
+| tsModel  | 0.6.     |
+| foreign  | 0.8-82   |
+| patchwork| 1.1.1    |
+| scales   | 1.1.1    |
+| lubridate| 1.8.0    |
+| here     | 1.0.1    |
+| haven    | 2.4.3    |
+| ggthemes | 4.2.4    |
+| stringr  | 1.4.0    |
+| dplyr    | 1.0.8    |
+| tidyr    | 1.2.0    |
+| multcomp | 1.4-18   |
+| ggplot2  | 3.3.5    |
+| tidyverse| 1.3.1    |
 
