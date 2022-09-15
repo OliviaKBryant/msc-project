@@ -14,12 +14,12 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
 - An analysis script for each part of the study (first lockdown, third lockdown, regional restrictions) is provided containing all of the functions run, and their inputs, to get the results of the study. 
 - The analysis scripts source the functions from code/ITS.
 
-##### analysis_data
+#### analysis_data
 
 - A folder is created for each part of the study and contains the preprocessed analysis CSV datasets for each of the outcomes.
 - The analysis datasets contain the week of the study, the stratifier (overall, age, sex, ethnicity, region), category of stratifier, number of outcomes, number of people eligible, and a binary marker for lockdown.
 
-##### code
+#### code
 
 ###### ITS
 
@@ -28,7 +28,7 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
 - ITS_regional_model.R - contains an adapted version of the binomial GLM function that looks at groups of regions and the regional model that estimates the interaction between tier group and lockdown on primary care contacts.
 - ITS_help_functions.R - contains helper functions for the ITS including formatting tables and formatting outcome data.
 
-###### data_preparation
+##### data_preparation
 
 - contains the function to generate the CSV files in analysis_data and runs the function for each of the outcomes and periods of restrictions.
 
@@ -36,7 +36,7 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
 
 - contains functions for plots used in the ITS and the descriptive analysis.
 
-##### plots
+#### plots
 
 - contains folders for each of the studies: descriptive, first national lockdown, third national lockdown, regional restrictions
 - contains all of the tables and figures created from running the files in analysis.
