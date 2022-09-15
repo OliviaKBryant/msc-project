@@ -22,10 +22,11 @@ This is a study assessing the impact of COVID-19 restrictinos in England on prim
 ##### code
 
 ###### ITS
-ITS_binomial_models.R - contains functions to run the binomial GLM modelling the proportion of the population consulting for each outcome and the negative binomial ITS function that estimates the number of primary care contacts each week.
-ITS_poisson_models.R - contains the function to run the Poisson ITS function that estimates the number of primary care contacts each week.
-ITS_regional_model.R - contains an adapted version of the binomial GLM function that looks at groups of regions and the regional model that estimates the interaction between tier group and lockdown on primary care contacts.
-ITS_help_functions.R - contains helper functions for the ITS including formatting tables and formatting outcome data.
+
+- ITS_binomial_models.R - contains functions to run the binomial GLM modelling the proportion of the population consulting for each outcome and the negative binomial ITS function that estimates the number of primary care contacts each week.
+- ITS_poisson_models.R - contains the function to run the Poisson ITS function that estimates the number of primary care contacts each week.
+- ITS_regional_model.R - contains an adapted version of the binomial GLM function that looks at groups of regions and the regional model that estimates the interaction between tier group and lockdown on primary care contacts.
+- ITS_help_functions.R - contains helper functions for the ITS including formatting tables and formatting outcome data.
 
 ###### data_preparation
 
