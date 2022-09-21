@@ -32,7 +32,7 @@ binomial_proportion_plot <- function(data, start_lockdown, display_from,
                               abline_max), col = 1, lwd = 1) + 
     labs(y = "% Study Population With Contacts for Condition", caption = "OCD: Obsessive Compulsive Disorder") +
     theme_classic() +
-    theme(axis.title = element_text(size = 26), 
+    theme(axis.title = element_text(size = 16), 
           axis.title.x = element_blank(),
           axis.text.x = element_text(angle = 60, hjust = 1, size = 16),
           legend.position = "top",
@@ -46,8 +46,8 @@ binomial_proportion_plot <- function(data, start_lockdown, display_from,
           panel.grid.major = element_blank(),
           panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
-          panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3)))  + 
-      scale_x_date(breaks = "1 month", date_labels = "%b")
+          panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3))) + 
+    scale_x_date(date_labels = "%b %y", breaks = breaks_pretty(10),labels = scales::label_date_short())
   
     if(incl_no_ldn_ribbon){
       plot <- plot + geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = lci_noLdn, ymax=uci_noLdn), fill = alpha(2, 0.4), lty = 0) 
@@ -82,20 +82,20 @@ poisson_count_plot <- function(data, start_lockdown, display_from,
     theme_classic() +
     theme(axis.title = element_text(size = 16), 
           axis.title.x = element_blank(),
-          axis.text.x = element_text(angle = 60, hjust = 1, size = 12),
+          axis.text.x = element_text(angle = 60, hjust = 1, size = 16),
           legend.position = "top",
           plot.background = element_rect(fill = bkg_colour, colour =  NA),
           panel.background = element_rect(fill = bkg_colour, colour =  NA),
           legend.background = element_rect(fill = bkg_colour, colour = NA),
-          legend.text = element_text(size = 12),
-          legend.title = element_text(size = 12),
-          strip.text = element_text(size = 12, hjust = 0),
+          legend.text = element_text(size = 16),
+          legend.title = element_text(size = 16),
+          strip.text = element_text(size = 16, hjust = 0),
           strip.background = element_rect(fill = bkg_colour, colour =  NA),
           panel.grid.major = element_blank(),
           panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_line(size=.2, color=rgb(0,0,0,0.2)) ,
           panel.grid.major.y = element_line(size=.2, color=rgb(0,0,0,0.3)))  + 
-    scale_x_date(breaks = "1 month", date_labels = "%b")
+    scale_x_date(date_labels = "%b %y", breaks = breaks_pretty(10),labels = scales::label_date_short())
   
   if (incl_no_ldn_ribbon){
     plot <- plot +  geom_ribbon(data = filter(data, weekPlot >= abline_min), aes(ymin = low_noLdn, ymax = upp_noLdn), fill = alpha(2,0.4), lty = 0)

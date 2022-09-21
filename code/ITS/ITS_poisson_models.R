@@ -25,6 +25,7 @@ library(patchwork)
 
 #-------------------------------------------------------------------------------
 # ITS COUNTS POISSON FUNCTION
+#-------------------------------------------------------------------------------
 # ITS function that uses Poisson regression to model counts of primary care 
 # contacts.
 # Inputs: cut_data is the date of the start of the pre-interruption period.
@@ -35,6 +36,7 @@ library(patchwork)
 # Outputs: plot of counterfactual vs observed counts. Table of estimated 
 # numbers of primary care contacts with/without lockdown and cumultive 
 # difference.
+#-------------------------------------------------------------------------------
 
 its_counts_poisson_function <- function(outcomes,
                                         cut_data = as.Date("2018-01-01"),
@@ -50,17 +52,19 @@ its_counts_poisson_function <- function(outcomes,
     
       plot_outcome <- function(outcome) {
         
+        # cut self-harm data pre-lockdown to be from 2019
         if (outcome == "selfharm" & chop_selfharm) {
           cutData <- as.Date("2019-01-01")
         }
         
+        # format outcome data
         df_outcome <- format_outcome_data(outcome, 
                                           start_lockdown, 
                                           lockdown_adjustment_period_wks, 
                                           end_post_lockdown_period,
                                           cut_data)
           
-        if (remove_xmas){
+        if (remove_xmas) {
           df_outcome <- df_outcome %>%
             filter(xmas == 0)
         }
@@ -68,14 +72,15 @@ its_counts_poisson_function <- function(outcomes,
         # start of post-lockdown period
         ldn_centre <- df_outcome$time[min(which(df_outcome$lockdown == 1))]
         
-        # Poisson model to obtain residuals  
+        # Poisson model to obtain residuals. Quasipoisson to allow for 
+        # dispersion parameter to be input later
         po_model1 <- glm(numOutcome ~ offset(log(numEligible)) + lockdown + time 
                          + I(time-ldn_centre):lockdown + as.factor(months) , 
                          family=quasipoisson, 
                          data = filter(df_outcome,
                                        !is.na(lockdown)))
         
-        # get lagged residuals
+        # store lagged residuals
         lagres1 <- lag(residuals(po_model1))
         
         # full model with lagged residuals to adjust for seasonality
@@ -103,7 +108,7 @@ its_counts_poisson_function <- function(outcomes,
         predicted_vals <- pred1$fit
         stbp <- pred1$se.fit
         
-        ## predict values if no lockdown 
+        # predict values if no lockdown 
         outcome_pred_nointervention <- outcome_pred %>%
           mutate_at("lockdown", ~(. = 0))
         
@@ -112,10 +117,11 @@ its_counts_poisson_function <- function(outcomes,
                   newdata = outcome_pred_nointervention, 
                   se.fit = TRUE, 
                   dispersion = deviance_adjustment) 
+        # save predicted values and SE
         stbp_noLdn <- predicted_vals_nointervention$se.fit	
         predicted_vals_noLdn <- predicted_vals_nointervention$fit	
         
-        # calculate standard errors and confidence intervals
+        # calculate and transform confidence intervals
         df_se <- bind_cols(stbp = stbp, 
                            pred = predicted_vals, 
                            stbp_noLdn = stbp_noLdn, 

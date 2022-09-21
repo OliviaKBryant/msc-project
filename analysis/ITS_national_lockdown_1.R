@@ -34,7 +34,7 @@ for(ii in 1:length(outcomes)){
 #-------------------------------------------------------------------------------
 
 # Binomial ITS 3 week adjustment: 8th March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_3wks_8thMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_3wks_8thMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -47,7 +47,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 5 week adjustment: 8th March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_5wks_8thMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_5wks_8thMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -60,7 +60,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 7 week adjustment: 8th March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_7wks_8thMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_7wks_8thMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -73,7 +73,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 3 week adjustment: 8th March - NO XMAS --------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_3wks_8thMarch_noXmas", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_3wks_8thMarch_noXmas", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -88,7 +88,7 @@ dev.off()
 
 
 # Binomial ITS 3 week adjustment: 22nd March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_3wks_22ndMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_3wks_22ndMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -101,7 +101,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 5 week adjustment: 22nd March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_5wks_22ndMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_5wks_22ndMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -114,7 +114,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 7 week adjustment: 22nd March ------------------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_7wks_22ndMarch", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_7wks_22ndMarch", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -127,7 +127,7 @@ binomial_its_function(outcomes_vec = outcomes,
 dev.off()
 
 # Binomial ITS 3 week adjustment: 22nd March - NO XMAS --------------------------
-pdf(file = here::here("plots/national_lockdown_1", paste0("FirstLockdown_3wks_22ndMarch_noXmas", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_3wks_22ndMarch_noXmas", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function(outcomes_vec = outcomes,
                       cut_data = as.Date("2017-01-01"),
@@ -145,7 +145,7 @@ dev.off()
 #-------------------------------------------------------------------------------
 
 # Poisson Counts ITS 3 week adjustment: 8th March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_3wks_8thMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_3wks_8thMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -157,7 +157,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 # Poisson Counts ITS 5 week adjustment: 8th March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_5wks_8thMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_5wks_8thMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -169,7 +169,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 # Poisson Counts ITS 7 week adjustment: 8th March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_7wks_8thMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_7wks_8thMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -181,7 +181,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 # Poisson Counts ITS 3 week adjustment: 22nd March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_3wks_22ndMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_3wks_22ndMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -193,7 +193,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 # Poisson Counts ITS 5 week adjustment: 22nd March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_5wks_22ndMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_5wks_22ndMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -205,7 +205,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 # Poisson Counts ITS 7 week adjustment: 22nd March ------------------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_7wks_22ndMarch_Poisson", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/poisson", paste0("FirstLockdown_7wks_22ndMarch_Poisson", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -222,7 +222,7 @@ dev.off()
 
 
 # Negative Binomial Counts ITS 3 week adjustment: 8th March ---------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_3wks_8thMarch_negBinom", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_3wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
 neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -234,7 +234,7 @@ neg_binomial_counts_function(outcome = outcomes,
 dev.off()
 
 # Negative Binomial Counts ITS 5 week adjustment: 8th March --------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_5wks_8thMarch_negBinom", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_5wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
 neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),
@@ -246,7 +246,7 @@ neg_binomial_counts_function(outcome = outcomes,
 dev.off()
 
 # Negative Binomial Counts ITS 7 week adjustment: 8th March --------------------
-pdf(file = here::here("plots/national_lockdown_1/", paste0("FirstLockdown_7wks_8thMarch_negBinom", ".pdf")), 
+pdf(file = here::here("plots/national_lockdown_1/binomial", paste0("FirstLockdown_7wks_8thMarch_negBinom", ".pdf")), 
     width = 13, height = 10)
 neg_binomial_counts_function(outcome = outcomes,
                             cut_data = as.Date("2017-01-01"),

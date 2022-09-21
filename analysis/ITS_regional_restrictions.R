@@ -29,7 +29,8 @@ outcome_of_interest_namematch <- bind_cols("outcome" = outcomes,
 plot_order <- c(1, 2, 3, 4, 5, 6) 
 # load data --------------------------------------------------------------------
 for(ii in 1:length(outcomes)){
-  load_file <- read.csv(here::here("analysis_data/regional_restrictions/", paste0("an_", outcomes[ii], ".csv")))
+  load_file <- read.csv(here::here("analysis_data/regional_restrictions/", 
+                                   paste0("an_", outcomes[ii], ".csv")))
   assign(outcomes[ii], load_file)
 }
 
@@ -60,7 +61,7 @@ smi_high <- split_regional_data('smi', high_group)
 smi_low <- split_regional_data('smi', low_group)
 
 #-------------------------------------------------------------------------------
-# High Restriction Group
+# High Restriction Group - Binomial GLM
 #-------------------------------------------------------------------------------
 
 # Binomial ITS 3 week adjustment period: High restrictions group
@@ -71,7 +72,8 @@ feedingdisorder <- feedingdisorder_high
 selfharm <- selfharm_high
 smi <- smi_high
 
-pdf(file = here::here("plots/regional_restrictions/high", paste0("Tiers_3wks_HighRestrictions", ".pdf")), 
+pdf(file = here::here("plots/regional_restrictions/high", 
+                      paste0("Tiers_3wks_HighRestrictions", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function_group(outcomes_vec = outcomes,
                       cut_data = as.Date("2020-03-22"),
@@ -86,7 +88,8 @@ binomial_its_function_group(outcomes_vec = outcomes,
 )
 dev.off()
 
-pdf(file = here::here("plots/regional_restrictions/high", paste0("Tiers_3wks_8thMarch", ".pdf")), 
+pdf(file = here::here("plots/regional_restrictions/high", 
+                      paste0("Tiers_3wks_8thMarch", ".pdf")), 
     width = 13, height = 10)
 its_counts_poisson_function(outcome = outcomes,
                             cut_data = as.Date("2020-03-22"),
@@ -99,7 +102,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 #-------------------------------------------------------------------------------
-# Low Restriction Group
+# Low Restriction Group - Binomial GLM
 #-------------------------------------------------------------------------------
 
 # Binomial ITS 3 week adjustment period: low restrictions group
@@ -110,7 +113,8 @@ feedingdisorder <- feedingdisorder_low
 selfharm <- selfharm_low
 smi <- smi_low
 
-pdf(file = here::here("plots/regional_restrictions/low", paste0("Tiers_3wks_LowRestrictions", ".pdf")), 
+pdf(file = here::here("plots/regional_restrictions/low", 
+                      paste0("Tiers_3wks_LowRestrictions", ".pdf")), 
     width = 13, height = 14)
 binomial_its_function_group(outcomes_vec = outcomes,
                       cut_data = as.Date("2020-03-22"),
@@ -141,7 +145,7 @@ its_counts_poisson_function(outcome = outcomes,
 dev.off()
 
 #-------------------------------------------------------------------------------
-# Modelling with Both Groups
+# Modelling with Both Groups - Regional model
 #-------------------------------------------------------------------------------
 anxiety_high$group <- 'high tier'
 anxiety_low$group <- 'low tier'
