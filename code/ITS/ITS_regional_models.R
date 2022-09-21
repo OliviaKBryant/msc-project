@@ -24,6 +24,7 @@ library(patchwork)
 library(dplyr)
 library(tidyr)
 library(MASS)
+library(scales)
 
 #-------------------------------------------------------------------------------
 # BINOMIAL ITS FUNCTION FOR ONE GROUP

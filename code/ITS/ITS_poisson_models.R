@@ -22,6 +22,7 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 library(patchwork)
+library(scales)
 
 #-------------------------------------------------------------------------------
 # ITS COUNTS POISSON FUNCTION
